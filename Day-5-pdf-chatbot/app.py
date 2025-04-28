@@ -1,10 +1,10 @@
+import streamlit as st
 import fitz # PyMuPDF
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-import os
 
 # Function to load and extract text from a PDF
-def extract_text_from_pdf(pdf_path): #Reads all pages of a PDF and combines the text
-    doc = fitz.open(pdf_path)
+def extract_text_from_pdf(uploaded_file): #Reads all pages of a PDF and combines the text
+    doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
     text = ""
     for page in doc:
         text += page.get_text()
@@ -20,14 +20,25 @@ def split_text(text, chunk_size=500, chunk_overlap=50): #breaks down the full te
     chunks = splitter.split_text(text)
     return chunks
 
-#Testing locally
+#Streamlit UI
+def main():
+    st.title("PDF Chatbot - Text Extraction Demo")
+
+    uploaded_file = st.file_uploader("Upload your PDF", type="pdf")
+
+    if uploaded_file is not None:
+        #Extract and display text
+        extracted_text = extract_text_from_pdf(uploaded_file)
+        st.subheader("Extracted Text")
+        st.write(extracted_text[:1000]) #show only first 1000 chars
+
+        #Split into chunks
+        chunks = split_text(extracted_text)
+        st.subheader("Number of Chunks Created")
+        st.write(len(chunks))
+        if st.checkbox("Show a few chunks"):
+            st.write(chunks[:3])
+            
+
 if __name__ == "__main__":
-    #Testing with my own PDF
-    pdf_file_path = "pdf_sample/LLM_ideas.pdf"
-    extracted_text = extract_text_from_pdf(pdf_file_path)
-    print(f"Total length of extracted text: {len(extracted_text)} characters")
-
-    chunks = split_text(extracted_text)
-    print(f"Split into {len(chunks)} chunks.")
-    print(chunks[:2]) #print first two chunks for sanity check
-
+    main()
