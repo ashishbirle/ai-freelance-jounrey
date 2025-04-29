@@ -42,4 +42,11 @@ streamlit run app.py
 ## License
 This project is licensed under the MIT License - feel free to modify and use it!
 
+## Skills Demonstrated
+
+- Python Programming, LangChain Integration, OpenAI API Usage
+- Natural Language Processing - Text Chunking, Tokenisation, Embedding   Generation, Semantic Search
+- Retrieval-Augmented Generation (RAG)
+- Streamlit Development
+
 [How it works](./WORKFLOW.md)
